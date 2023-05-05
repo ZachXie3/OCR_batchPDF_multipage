@@ -10,7 +10,6 @@ from pdf2image import convert_from_path
 from PIL import Image
 
 if platform.system() == "Windows":
-	# We may need to do some additional downloading and setup...
 	# Windows needs a PyTesseract Download
 	# https://github.com/UB-Mannheim/tesseract/wiki/Downloading-Tesseract-OCR-Engine
 
@@ -21,7 +20,6 @@ if platform.system() == "Windows":
 	# Windows also needs poppler_exe
 	path_to_poppler_exe = Path(r"C:\Program Files\poppler-0.68.0\bin")
 	
-	# Put our output files in a sane place...
 	out_directory = Path(r"~\Desktop").expanduser()
 else:
 	out_directory = Path("~").expanduser()	
@@ -88,31 +86,14 @@ def main():
 				# ....
 				# page_n.jpg
 
-				# Recognize the text as string in image using pytesserct
 				text = str(((pytesseract.image_to_string(Image.open(image_file)))))
-
-				# The recognized text is stored in variable text
-				# Any string processing may be applied on text
-				# Here, basic formatting has been done:
-				# In many PDFs, at line ending, if a word can't
-				# be written fully, a 'hyphen' is added.
-				# The rest of the word is written in the next line
-				# Eg: This is a sample text this word here GeeksF-
-				# orGeeks is half on first line, remaining on next.
-				# To remove this, we replace every '-\n' to ''.
 				text = text.replace("-\n", "")
 
-				# Finally, write the processed text to the file.
 				output_file.write(text)
 
-			# At the end of the with .. output_file block
-			# the file is closed after writing all the text.
-		# At the end of the with .. tempdir block, the
-		# TemporaryDirectory() we're using gets removed!	
-	# End of main function!
-	
-#if __name__ == "__main__":
-#	# We only want to run this if it's directly executed!
-#	main()
+			# At the end of the with .. output_file block the file is closed
+		# At the end of the with .. tempdir block, the TemporaryDirectory() gets removed
 
-main()
+	
+if __name__ == "__main__":
+	main()
